@@ -1,0 +1,13 @@
+window	main.c	/^static GtkWidget* window;$/;"	v	file:
+imagen	main.c	/^static GtkWidget* imagen;$/;"	v	file:
+builder	main.c	/^static GtkBuilder *builder;$/;"	v	file:
+s	main.c	/^char** s;$/;"	v
+frec	main.c	/^int frec[250];	$/;"	v
+lst_idx	main.c	/^int lst_idx = 0;$/;"	v
+actualizar	main.c	/^void actualizar(){$/;"	f
+crear_csv	main.c	/^void crear_csv(){$/;"	f
+mostrar_imagen	main.c	/^void mostrar_imagen(){$/;"	f
+crear_tabla	main.c	/^void crear_tabla(){$/;"	f
+ejecutar_comando	main.c	/^ void ejecutar_comando(GtkButton *ejecutar, gpointer data){$/;"	f
+interfaz	main.c	/^void interfaz()$/;"	f
+main	main.c	/^int main (int argc, char *argv[]) {$/;"	f
