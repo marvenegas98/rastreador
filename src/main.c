@@ -91,10 +91,13 @@ void crear_tabla(){
 
 void interfaz()
 {
+	window   = 0;
+	
 	GtkButton *ejecutar;
     GtkEntry *comando;
+    
 	builder = gtk_builder_new();
-	gtk_builder_add_from_file (builder, "interfaz.glade", NULL);
+	gtk_builder_add_from_file (builder, "glade/interfaz.glade", NULL);
 	window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
 	comando = GTK_ENTRY(gtk_builder_get_object(builder, "comando"));
 	ejecutar = GTK_BUTTON(gtk_builder_get_object(builder, "ejecutar"));
