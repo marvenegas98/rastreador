@@ -8,6 +8,18 @@
 static GtkWidget* window;
 static GtkWidget* imagen;
 static GtkBuilder *builder;
+GtkWidget *fixed1;
+GtkWidget *grid1; 
+GtkWidget *label[1000];
+GtkWidget *button[1000];
+GtkWidget *view1;
+
+void on_destroy(); 
+void on_row(GtkButton *);
+
+char tmp[1024]; // general use
+int	row;
+
 char** s;
 int frec[250];	
 int lst_idx = 0;
@@ -89,6 +101,19 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 	system(strace);
 	crear_tabla();
 	crear_csv();
+	int ind = 0;
+
+	row = 0;
+	while (ind<lst_idx-1) {
+		gtk_grid_insert_row (GTK_GRID(grid1), row);
+
+		button[row] = gtk_button_new_with_label (s[ind]);
+		gtk_button_set_alignment (GTK_BUTTON(button[row]), 0.0, 0.5); // hor left, ver center
+		gtk_grid_attach (GTK_GRID(grid1), button[row], 1, row, 1, 1);
+		g_signal_connect(button[row], "clicked", G_CALLBACK(on_row), NULL);
+		row ++;
+		ind ++;
+	}
 	mostrar_imagen();
 }	
 
@@ -140,9 +165,14 @@ void interfaz()
 	builder = gtk_builder_new();
 	gtk_builder_add_from_file (builder, "glade/interfaz.glade", NULL);
 	window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
+	g_signal_connect(window, "destroy", G_CALLBACK(on_destroy), NULL);
 	comando = GTK_ENTRY(gtk_builder_get_object(builder, "comando"));
 	ejecutar = GTK_BUTTON(gtk_builder_get_object(builder, "ejecutar"));
-	imagen=GTK_WIDGET(gtk_builder_get_object(builder,"imagen"));
+	imagen = GTK_WIDGET(gtk_builder_get_object(builder,"imagen"));
+	fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
+	view1 = GTK_WIDGET(gtk_builder_get_object(builder, "view1"));
+	grid1 = GTK_WIDGET(gtk_builder_get_object(builder, "grid1"));
+		
     gtk_builder_connect_signals(builder, NULL);
   
 	g_object_unref(builder);
@@ -151,8 +181,17 @@ void interfaz()
 
 
 	gtk_main();
-	
+	return EXIT_SUCCESS;
 }
+
+void	on_row(GtkButton *b) {
+	printf("Seleccionó: %s\n", gtk_button_get_label (b));
+}
+
+void	on_destroy() { 
+		gtk_main_quit();
+}
+
 int main (int argc, char *argv[]) {
 	gtk_init(&argc, &argv);
 	interfaz();
