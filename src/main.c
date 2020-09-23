@@ -11,6 +11,8 @@ static GtkBuilder *builder;
 char** s;
 int frec[250];	
 int lst_idx = 0;
+int bandera1 = 0;
+int indice = 0;
 /*
 Funcion para leer los syscalls del txt tras haber ejecutado el comando
 Los lee, capta el nombre y los mete a un arreglo contando cuantas veces aparece para crear la tabla para el grafico
@@ -30,6 +32,7 @@ void crear_csv(){
 	
 	fclose(fp);
 }
+
 
 void mostrar_imagen(){
 	system("gnuplot pastel.gnuplot");
@@ -72,13 +75,13 @@ void crear_tabla(){
 		}
 		
     }
-	printf("lst idx %i\n",lst_idx);
+	//printf("lst idx %i\n",lst_idx);
 
     fclose(fp);
     if (line)
         free(line);
 }
- void ejecutar_comando(GtkButton *ejecutar, gpointer data){
+void ejecutar_comando(GtkButton *ejecutar, gpointer data){
     const char *text = gtk_entry_get_text(data);
 	char strace[50];
 	strcpy(strace, "strace -o syscalls.txt "); //Guardar en txt sus syscalls del comando
@@ -88,6 +91,44 @@ void crear_tabla(){
 	crear_csv();
 	mostrar_imagen();
 }	
+
+void ejecutar_pausado(GtkButton *ejecutarPausado, gpointer data){
+    const char *text = gtk_entry_get_text(data);
+	char strace[50];
+	strcpy(strace, "strace -o syscalls.txt "); //Guardar en txt sus syscalls del comando
+	strcat(strace,text);
+	system(strace);
+	crear_tabla();
+	//gtk_widget_set_sensitive (ejecutarPausado, FALSE);
+}
+
+void ejecutar_siguiente(GtkButton *siguiente){
+    FILE *fp;
+	fp=fopen("tabla.csv","a");
+	if (bandera1 == 0){
+		fprintf(fp,"Nombre, Frecuencia");
+		bandera1 = 1;
+	}
+	if(indice<lst_idx-1){
+		fprintf(fp,"\n%s , %i",s[indice], frec[indice]);
+		indice += 1;
+	}
+		
+	else
+		gtk_widget_set_sensitive (siguiente, FALSE);	
+	
+	fclose(fp);
+	mostrar_imagen();
+}
+
+//Esto falta, no sé aún cómo reiniciar la ventana
+/**
+void reiniciar_ejecucion(GtkButton *reiniciar){
+	gtk_main_quit();
+	
+	interfaz();
+}
+*/
 
 void interfaz()
 {
