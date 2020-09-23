@@ -102,17 +102,36 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 	crear_tabla();
 	crear_csv();
 	int ind = 0;
+	char frecuencia[10000];
+	char stringCount[10000];
 
 	row = 0;
+	int count = 0;
 	while (ind<lst_idx-1) {
 		gtk_grid_insert_row (GTK_GRID(grid1), row);
+		
+		snprintf(frecuencia, 10000, "%d", frec[ind]);
+		snprintf(stringCount, 10000, "%d", count);
+		char* string0 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
+		char* string1 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
+		char* string2 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
+		char* string3 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
+		char* string4 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
+		char* string5 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
+		string0 = strcat(stringCount, "                   ");
+		string1 = strcat(string0, frecuencia);
+		string2 = strcat(string1,"                   ");
+		string3 = strcat(string2,s[ind]);
+		string4 = strcat(string3,"                   ");
+		string5 = strcat(string4,"Descripcion");
 
-		button[row] = gtk_button_new_with_label (s[ind]);
+		button[row] = gtk_button_new_with_label (string5);
 		gtk_button_set_alignment (GTK_BUTTON(button[row]), 0.0, 0.5); // hor left, ver center
 		gtk_grid_attach (GTK_GRID(grid1), button[row], 1, row, 1, 1);
 		g_signal_connect(button[row], "clicked", G_CALLBACK(on_row), NULL);
 		row ++;
 		ind ++;
+		count ++;
 	}
 	mostrar_imagen();
 }	
@@ -185,7 +204,7 @@ void interfaz()
 }
 
 void	on_row(GtkButton *b) {
-	printf("Seleccionó: %s\n", gtk_button_get_label (b));
+	printf("Selecció: %s\n", gtk_button_get_label (b));
 }
 
 void	on_destroy() { 

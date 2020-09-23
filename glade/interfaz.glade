@@ -291,7 +291,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="yes">Nombre</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -302,7 +302,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="yes">   Descripción</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
