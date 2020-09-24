@@ -21,7 +21,7 @@ GtkWidget *grid1;
 GtkWidget *label[1000];
 GtkWidget *button[1000];
 GtkWidget *view1;
-GtkWidget *siguiente;
+GtkButton *siguiente;
 
 void on_destroy(); 
 void on_row(GtkButton *);
@@ -32,6 +32,7 @@ int	row;
 char** s;
 int frec[250];	
 int lst_idx = 0;
+int otraBandera = 0;
 
 /*
 Funcion para leer los syscalls del txt tras haber ejecutado el comando
@@ -163,19 +164,15 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 	mostrar_imagen();
 }	
 
-void ejecutar_pausado(GtkButton *ejecutarPausado, gpointer data){
+void ejecutar_pausado(GtkButton *ejecutarPausado, GtkButton *siguiente, gpointer data){
+	
+	siguiente = siguiente;
 	
 	flag = 1;
 	if(data != NULL)
 		gtk_widget_set_sensitive (ejecutarPausado, FALSE);
 	
 	const char *text = gtk_entry_get_text(data);
-	char strace[50];
-	strcpy(strace, "strace -o syscalls.txt "); //Guardar en txt sus syscalls del comando
-	strcat(strace,text);
-	system(strace);
-	crear_tabla();
-	crear_csv();
 		
 	int ind = 0;
 	char secuencia[10000];
@@ -197,15 +194,10 @@ void ejecutar_pausado(GtkButton *ejecutarPausado, gpointer data){
 	
 }
 
-void ejecutar_siguiente_False(GtkWidget *widget){
-	gtk_widget_set_sensitive (widget, FALSE);
-
+void ejecutar_siguiente(GtkButton *siguiente){
+	otraBandera = 1;
 }
 
-void ejecutar_siguiente_True(GtkWidget *widget){
-	gtk_widget_set_sensitive (widget, TRUE);
-
-}
 
 //Esto falta, no sé aún cómo reiniciar la ventana
 /**
@@ -233,8 +225,7 @@ void interfaz()
 	fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
 	view1 = GTK_WIDGET(gtk_builder_get_object(builder, "view1"));
 	grid1 = GTK_WIDGET(gtk_builder_get_object(builder, "grid1"));
-	g_signal_connect (siguiente, "clicked", G_CALLBACK (ejecutar_siguiente_False), NULL);
-		
+			
     gtk_builder_connect_signals(builder, NULL);
   
 	g_object_unref(builder);
@@ -352,14 +343,21 @@ int trace(pid_t child)
         if (flag != -1) fprintf(stderr, "%d\n", retval);
 
         //any_key();
-        gboolean button_state;
         
-        button_state = gtk_toggle_button_get_active(siguiente); //Aquí quiero saber cómo agarrar el botón como global y modificrlo
-        while(button_state){
-			
+		if (flag){
+			while(!otraBandera){
+				if(otraBandera)
+					break;
+				
+				else
+					continue;
+				
+			}
 		}
 		
-		ejecutar_siguiente_True(siguiente);
+		otraBandera = 0;
+	
+		
     }
 
     return 0;
