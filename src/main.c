@@ -4,6 +4,14 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/ptrace.h> // Para rastrear procesos hijos
+#include <sys/reg.h> // RAX, ORIG_RAX
+#include <sys/wait.h> // KILL, SIGSTOP, waitpid
+
+int table_lenght = 0; // Largo de la tabla de syscalls
+int mtx[2][1000]; // [] PID, [] Cantidad de syscalls con ese PID
+int PIDS = sizeof(mtx[0]) / sizeof(mtx[0][0]); // Cantidad de columnas de la matriz
+int flag = -1; // 0 -v , 1 -V
 
 static GtkWidget* window;
 static GtkWidget* imagen;
@@ -13,6 +21,7 @@ GtkWidget *grid1;
 GtkWidget *label[1000];
 GtkWidget *button[1000];
 GtkWidget *view1;
+GtkButton *siguiente;
 
 void on_destroy(); 
 void on_row(GtkButton *);
@@ -23,8 +32,7 @@ int	row;
 char** s;
 int frec[250];	
 int lst_idx = 0;
-int bandera1 = 0;
-int indice = 0;
+
 /*
 Funcion para leer los syscalls del txt tras haber ejecutado el comando
 Los lee, capta el nombre y los mete a un arreglo contando cuantas veces aparece para crear la tabla para el grafico
@@ -101,68 +109,97 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 	system(strace);
 	crear_tabla();
 	crear_csv();
+		
 	int ind = 0;
+	char secuencia[10000];
+	char id[10000];
 	char frecuencia[10000];
-	char stringCount[10000];
+	
+	char *array[10];
+	int i=1;
+	
+	array[0] = "./interfaz";
+	array[i] = strtok(text," ");
+
+	while(array[i]!=NULL){
+		array[++i] = strtok(NULL," ");
+	}
+	
+	otroMain(array,i);
 
 	row = 0;
-	int count = 0;
-	while (ind<lst_idx-1) {
-		gtk_grid_insert_row (GTK_GRID(grid1), row);
+	for (int i = 0; i < table_lenght; i++)
+    {
+    	printf("\n\t %d\t %d\t      %d\n", i, mtx[0][i], mtx[1][i]);
+    	printf("\t----------------------------");
+    	gtk_grid_insert_row (GTK_GRID(grid1), row);
+    
+	
 		
-		snprintf(frecuencia, 10000, "%d", frec[ind]);
-		snprintf(stringCount, 10000, "%d", count);
+		snprintf(secuencia, 10000, "%d", i);
+		snprintf(id, 10000, "%d", mtx[0][i]);
+		snprintf(frecuencia, 10000, "%d", mtx[1][i]);
 		char* string0 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
 		char* string1 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
 		char* string2 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
 		char* string3 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
 		char* string4 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
 		char* string5 = malloc(strlen(s[ind])+strlen(frecuencia)+1);
-		string0 = strcat(stringCount, "                   ");
-		string1 = strcat(string0, frecuencia);
-		string2 = strcat(string1,"                   ");
-		string3 = strcat(string2,s[ind]);
-		string4 = strcat(string3,"                   ");
-		string5 = strcat(string4,"Descripcion");
+
+		string0 = strcat(secuencia, "                   ");
+		string1 = strcat(string0, id);
+		string2 = strcat(string1, "                   ");
+		string3 = strcat(string2, "Nombre");
+		string4 = strcat(string3, "                   ");
+		string5 = strcat(string4, "Descripción");
 
 		button[row] = gtk_button_new_with_label (string5);
 		gtk_button_set_alignment (GTK_BUTTON(button[row]), 0.0, 0.5); // hor left, ver center
 		gtk_grid_attach (GTK_GRID(grid1), button[row], 1, row, 1, 1);
 		g_signal_connect(button[row], "clicked", G_CALLBACK(on_row), NULL);
 		row ++;
-		ind ++;
-		count ++;
 	}
+		
 	mostrar_imagen();
 }	
 
 void ejecutar_pausado(GtkButton *ejecutarPausado, gpointer data){
-    const char *text = gtk_entry_get_text(data);
+	
+	flag = 1;
+	if(data != NULL)
+		gtk_widget_set_sensitive (ejecutarPausado, FALSE);
+	
+	const char *text = gtk_entry_get_text(data);
 	char strace[50];
 	strcpy(strace, "strace -o syscalls.txt "); //Guardar en txt sus syscalls del comando
 	strcat(strace,text);
 	system(strace);
 	crear_tabla();
-	//gtk_widget_set_sensitive (ejecutarPausado, FALSE);
+	crear_csv();
+		
+	int ind = 0;
+	char secuencia[10000];
+	char id[10000];
+	char frecuencia[10000];
+	
+	char *array[10];
+	int i=2;
+	
+	array[0] = "./interfaz";
+	array[1] = "-V";
+	array[i] = strtok(text," ");
+
+	while(array[i]!=NULL){
+		array[++i] = strtok(NULL," ");
+	}
+	
+	otroMain(array,i);
+	
 }
 
 void ejecutar_siguiente(GtkButton *siguiente){
-    FILE *fp;
-	fp=fopen("tabla.csv","a");
-	if (bandera1 == 0){
-		fprintf(fp,"Nombre, Frecuencia");
-		bandera1 = 1;
-	}
-	if(indice<lst_idx-1){
-		fprintf(fp,"\n%s , %i",s[indice], frec[indice]);
-		indice += 1;
-	}
-		
-	else
-		gtk_widget_set_sensitive (siguiente, FALSE);	
-	
-	fclose(fp);
-	mostrar_imagen();
+	gtk_widget_set_sensitive (siguiente, FALSE);
+
 }
 
 //Esto falta, no sé aún cómo reiniciar la ventana
@@ -209,6 +246,150 @@ void	on_row(GtkButton *b) {
 
 void	on_destroy() { 
 		gtk_main_quit();
+}
+
+
+//Realmente funciona únicamente con ENTER
+void any_key()
+{
+	if (flag == 1){
+		printf("Presione Enter para continuar: \n");  
+		getchar();//pause(2);//getchar();
+	}
+}
+
+// Imprime la tabla de syscalls acumulados
+void print_table()
+{
+
+	printf("\n\t       Tabla Acumulada\t\n");
+	printf("\t----------------------------");
+	printf("\n\t i\tSysCall\t   Cantidad\n");
+	printf("\t----------------------------");
+
+    for (int i = 0; i < table_lenght; i++)
+    {
+    	printf("\n\t %d\t %d\t      %d\n", i, mtx[0][i], mtx[1][i]);
+    	printf("\t----------------------------");
+    }
+    printf("\n");
+}
+
+// Busca un lugar en mtx para alojar un nuevo syscall o incrementar sus usos
+int find_place(int pid)
+{
+
+	int i = 0;
+
+	for (i; i < PIDS; i++){
+
+		if (mtx[0][i] == pid || mtx[0][i] == -1) {
+			mtx[1][i]++;
+			break;
+		}
+	}
+
+	if (i >= table_lenght) table_lenght = i+1;
+
+	return i;
+}
+
+int create_child(int argc, char **argv) {
+
+    char *args [argc+1];
+    
+    memcpy(args, argv, argc * sizeof(char*));
+    args[argc] = NULL;
+    ptrace(PTRACE_TRACEME);
+    kill(getpid(), SIGSTOP);
+
+    return execvp(args[0], args);
+}
+
+
+int wait_for_syscall(pid_t child) {
+    int status;
+
+    while (1) {
+
+        ptrace(PTRACE_SYSCALL, child, 0, 0);
+        waitpid(child, &status, 0);
+
+        if (WIFSTOPPED(status) && WSTOPSIG(status) & 0x80) return 0;
+        
+        if (WIFEXITED(status)) return 1;
+    }
+}
+
+int trace(pid_t child) 
+{
+
+    int status, syscall, retval;
+    waitpid(child, &status, 0);
+    ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD);
+
+    while(1) 
+    {
+    	if (wait_for_syscall(child) != 0) break;
+
+        syscall = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX);
+
+        int place = find_place(syscall); //Busca un ligar en mtx[0] y lo ubica o suma
+        mtx[0][place] = syscall;		 // la cantidad de PIDS del contador en mtx[1]
+
+        if (flag != -1) fprintf(stderr, "Syscall(%d) = ", syscall); // Si es -v imprima datos del syscall
+
+        if (wait_for_syscall(child) != 0) break;
+
+        retval = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*RAX); // Si es -v imprima valor de retorno del syscall
+
+        if (flag != -1) fprintf(stderr, "%d\n", retval);
+
+        //any_key();
+        gboolean button_state;
+        
+        button_state = gtk_toggle_button_get_active(siguiente);
+        while(button_state){
+			
+		}
+		
+		gtk_widget_set_sensitive (siguiente, TRUE);
+    }
+
+    return 0;
+}
+
+int otroMain(char **argv,int argc) {
+	
+    if (argc < 2) { // Debe haber argumentos en el comando de ejecución
+        fprintf(stderr, "Flatan argumentos: %s program arg1 arg2 arg3...\n", argv[0]);
+        return 0;
+    }
+
+    if (strcmp(argv[1],"-v") == 0) flag = 0; // -v
+
+    if (strcmp(argv[1],"-V") == 0) flag = 1; // -V
+
+
+    for (int i=0; i < PIDS; i++){ // Inicializa mtx
+    	mtx[0][i] = -1;
+    	mtx[1][i] = 0;
+    }
+
+    pid_t child = fork(); // Obtengo el PID del proceso hijo
+    if (child == 0) {
+
+    	if (flag >= 0) create_child(argc-2, argv+2); // Si hay -v o -V, se corrigen argv y argc
+    	else create_child(argc-1, argv+1); // Se ignora ./rastreador
+
+    } else {
+        trace(child);
+    }
+    printf(" \n \n");
+
+    print_table();
+    
+    return 0;
 }
 
 int main (int argc, char *argv[]) {
