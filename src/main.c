@@ -21,7 +21,7 @@ GtkWidget *grid1;
 GtkWidget *label[1000];
 GtkWidget *button[1000];
 GtkWidget *view1;
-GtkButton *siguiente;
+GtkWidget *siguiente;
 
 void on_destroy(); 
 void on_row(GtkButton *);
@@ -156,7 +156,7 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 		button[row] = gtk_button_new_with_label (string5);
 		gtk_button_set_alignment (GTK_BUTTON(button[row]), 0.0, 0.5); // hor left, ver center
 		gtk_grid_attach (GTK_GRID(grid1), button[row], 1, row, 1, 1);
-		g_signal_connect(button[row], "clicked", G_CALLBACK(on_row), NULL);
+		//g_signal_connect(button[row], "clicked", G_CALLBACK(on_row), NULL);
 		row ++;
 	}
 		
@@ -197,8 +197,13 @@ void ejecutar_pausado(GtkButton *ejecutarPausado, gpointer data){
 	
 }
 
-void ejecutar_siguiente(GtkButton *siguiente){
-	gtk_widget_set_sensitive (siguiente, FALSE);
+void ejecutar_siguiente_False(GtkWidget *widget){
+	gtk_widget_set_sensitive (widget, FALSE);
+
+}
+
+void ejecutar_siguiente_True(GtkWidget *widget){
+	gtk_widget_set_sensitive (widget, TRUE);
 
 }
 
@@ -228,6 +233,7 @@ void interfaz()
 	fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
 	view1 = GTK_WIDGET(gtk_builder_get_object(builder, "view1"));
 	grid1 = GTK_WIDGET(gtk_builder_get_object(builder, "grid1"));
+	g_signal_connect (siguiente, "clicked", G_CALLBACK (ejecutar_siguiente_False), NULL);
 		
     gtk_builder_connect_signals(builder, NULL);
   
@@ -348,12 +354,12 @@ int trace(pid_t child)
         //any_key();
         gboolean button_state;
         
-        button_state = gtk_toggle_button_get_active(siguiente);
+        button_state = gtk_toggle_button_get_active(siguiente); //Aquí quiero saber cómo agarrar el botón como global y modificrlo
         while(button_state){
 			
 		}
 		
-		gtk_widget_set_sensitive (siguiente, TRUE);
+		ejecutar_siguiente_True(siguiente);
     }
 
     return 0;
