@@ -12,7 +12,8 @@ int table_lenght = 0; // Largo de la tabla de syscalls
 int mtx[2][1000]; // [] PID, [] Cantidad de syscalls con ese PID
 int PIDS = sizeof(mtx[0]) / sizeof(mtx[0][0]); // Cantidad de columnas de la matriz
 int flag = -1; // 0 -v , 1 -V
-
+int global_idx=0;
+int elementos=0;
 static GtkWidget* window;
 static GtkWidget* imagen;
 static GtkBuilder *builder;
@@ -30,13 +31,10 @@ char tmp[1024]; // general use
 int	row;
 
 char** s;
+char** syscalls;
 int frec[250];	
 int lst_idx = 0;
 
-/*
-Funcion para leer los syscalls del txt tras haber ejecutado el comando
-Los lee, capta el nombre y los mete a un arreglo contando cuantas veces aparece para crear la tabla para el grafico
-*/
 void actualizar(){
 	while(gtk_events_pending()){
 		gtk_main_iteration_do(1);
@@ -73,15 +71,21 @@ void crear_tabla(){
         s[i] = (char *)malloc(20);
 		s[i] = "";
     }
+
+	syscalls = (char **)calloc(250,sizeof(char **));
+	for(int i = 0; i < 250; i++){
+        syscalls[i] = (char *)malloc(20);
+		syscalls[i] = "";
+    }
     fp = fopen("syscalls.txt", "r"); 
     if (fp == NULL)
         exit(EXIT_FAILURE);
-
     while ((read = getline(&line, &len, fp)) != -1) {
 		char *ptr = NULL;
 		ptr = strtok(line, "(");
 		int flag = 0;
-
+		syscalls[global_idx]=strdup(ptr);
+		global_idx+=1;
 		for(int k = 0; k<=lst_idx;k++){
 			if(strcmp(s[k], ptr) == 0){
 				frec[k]+=1;
@@ -101,40 +105,21 @@ void crear_tabla(){
     if (line)
         free(line);
 }
-void ejecutar_comando(GtkButton *ejecutar, gpointer data){
-    const char *text = gtk_entry_get_text(data);
-	char strace[50];
-	strcpy(strace, "strace -o syscalls.txt "); //Guardar en txt sus syscalls del comando
-	strcat(strace,text);
-	system(strace);
-	crear_tabla();
-	crear_csv();
-		
+
+void llenar_bitacora(){
 	int ind = 0;
 	char secuencia[10000];
 	char id[10000];
 	char frecuencia[10000];
-	
-	char *array[10];
-	int i=1;
-	
-	array[0] = "./interfaz";
-	array[i] = strtok(text," ");
-
-	while(array[i]!=NULL){
-		array[++i] = strtok(NULL," ");
-	}
-	
-	otroMain(array,i);
-
 	row = 0;
+	//Sustituir por global_idx apenas se tenga lo de los nombres
 	for (int i = 0; i < table_lenght; i++)
     {
-    	printf("\n\t %d\t %d\t      %d\n", i, mtx[0][i], mtx[1][i]);
-    	printf("\t----------------------------");
+    	//printf("\n\t %d\t %d\t      %d\n", i, mtx[0][i], mtx[1][i]);
+    	//printf("\t----------------------------");
     	gtk_grid_insert_row (GTK_GRID(grid1), row);
     
-	
+		//MTX[0][i] tiene el id, y [1][i] tiene la frecuencia
 		
 		snprintf(secuencia, 10000, "%d", i);
 		snprintf(id, 10000, "%d", mtx[0][i]);
@@ -149,7 +134,7 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 		string0 = strcat(secuencia, "                   ");
 		string1 = strcat(string0, id);
 		string2 = strcat(string1, "                   ");
-		string3 = strcat(string2, "Nombre");
+		string3 = strcat(string2, s[i]);
 		string4 = strcat(string3, "                   ");
 		string5 = strcat(string4, "Descripción");
 
@@ -157,9 +142,58 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 		gtk_button_set_alignment (GTK_BUTTON(button[row]), 0.0, 0.5); // hor left, ver center
 		gtk_grid_attach (GTK_GRID(grid1), button[row], 1, row, 1, 1);
 		g_signal_connect(button[row], "clicked", G_CALLBACK(on_row), NULL);
+		gtk_widget_show_all(window);
+		actualizar();
+		sleep(1);
 		row ++;
 	}
-		
+}
+
+// Va a ingresar una cadena a partir, dividida por espacios.
+char** split_command(char* cadena) {
+
+	char pivote[50]; //Variable para contar la cantidad de elementos.
+
+	strcpy(pivote, cadena);
+	char * token = strtok(pivote, " ");
+	// Esto es solo para contar y sacar el largo de la lista final.
+	while( token != NULL ) {
+		token = strtok(NULL, " ");
+		elementos++;
+	}
+	elementos+=1;
+	int i = 0;
+    char *elemento = strtok (cadena, " ");
+    char **lista;
+    lista = malloc(elementos * sizeof(char*));
+	lista[0] = "./interfaz";
+	i++;
+
+    while (elemento != NULL)
+    {
+        lista[i++] = elemento;
+        elemento = strtok (NULL, " ");
+    }
+        
+        
+   return lista;
+}
+
+void ejecutar_comando(GtkButton *ejecutar, gpointer data){
+	flag=0;
+	const char *text;
+    text = gtk_entry_get_text(data);
+	char strace[50];
+	strcpy(strace, "strace -o syscalls.txt "); //Guardar en txt sus syscalls del comando
+	strcat(strace,text);
+	system(strace);
+	char** args = split_command(text);
+	for (int i = 0; i < elementos; ++i){
+        printf("esto %s\n", args[i]);}
+	crear_tabla();
+	otroMain(args,elementos);
+	llenar_bitacora();
+	crear_csv();
 	mostrar_imagen();
 }	
 
@@ -346,6 +380,7 @@ int trace(pid_t child)
         if (flag != -1) fprintf(stderr, "%d\n", retval);
 
         //any_key();
+		/*
         gboolean button_state;
         
         button_state = gtk_toggle_button_get_active(siguiente);
@@ -354,22 +389,15 @@ int trace(pid_t child)
 		}
 		
 		gtk_widget_set_sensitive (siguiente, TRUE);
+		*/
     }
 
     return 0;
 }
 
 int otroMain(char **argv,int argc) {
-	
-    if (argc < 2) { // Debe haber argumentos en el comando de ejecución
-        fprintf(stderr, "Flatan argumentos: %s program arg1 arg2 arg3...\n", argv[0]);
-        return 0;
-    }
 
-    if (strcmp(argv[1],"-v") == 0) flag = 0; // -v
-
-    if (strcmp(argv[1],"-V") == 0) flag = 1; // -V
-
+	printf("Here in otroMain");
 
     for (int i=0; i < PIDS; i++){ // Inicializa mtx
     	mtx[0][i] = -1;
@@ -379,8 +407,7 @@ int otroMain(char **argv,int argc) {
     pid_t child = fork(); // Obtengo el PID del proceso hijo
     if (child == 0) {
 
-    	if (flag >= 0) create_child(argc-2, argv+2); // Si hay -v o -V, se corrigen argv y argc
-    	else create_child(argc-1, argv+1); // Se ignora ./rastreador
+    	 create_child(argc-1, argv+1); // Se ignora ./rastreador
 
     } else {
         trace(child);
