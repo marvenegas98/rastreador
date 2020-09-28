@@ -18,7 +18,8 @@ static GtkWidget* window;
 static GtkWidget* imagen;
 static GtkBuilder *builder;
 GtkWidget *fixed1;
-GtkWidget *grid1; 
+GtkWidget *grid1;
+GtkWidget *grid2; 
 GtkWidget *label[1000];
 GtkWidget *button[1000];
 GtkWidget *view1;
@@ -28,10 +29,11 @@ void on_destroy();
 void on_row(GtkButton *);
 
 char tmp[1024]; // general use
-int	row;
+int	row=0;
 
 char** s;
 char** syscalls;
+char** sysnames;
 int frec[250];	
 int lst_idx = 0;
 
@@ -105,7 +107,7 @@ void crear_tabla(){
     if (line)
         free(line);
 }
-
+/*
 void llenar_bitacora(){
 	int ind = 0;
 	char secuencia[10000];
@@ -148,7 +150,7 @@ void llenar_bitacora(){
 		row ++;
 	}
 }
-
+*/
 // Va a ingresar una cadena a partir, dividida por espacios.
 char** split_command(char* cadena) {
 
@@ -188,11 +190,16 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 	strcat(strace,text);
 	system(strace);
 	char** args = split_command(text);
+	sysnames = (char **)calloc(250,sizeof(char **));
+	for(int i = 0; i < 250; i++){
+        sysnames[i] = (char *)malloc(20);
+		sysnames[i] = "";
+    }
 	for (int i = 0; i < elementos; ++i){
         printf("esto %s\n", args[i]);}
 	crear_tabla();
 	otroMain(args,elementos);
-	llenar_bitacora();
+	//llenar_bitacora();
 	crear_csv();
 	mostrar_imagen();
 }	
@@ -262,6 +269,7 @@ void interfaz()
 	fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
 	view1 = GTK_WIDGET(gtk_builder_get_object(builder, "view1"));
 	grid1 = GTK_WIDGET(gtk_builder_get_object(builder, "grid1"));
+	grid2 = GTK_WIDGET(gtk_builder_get_object(builder, "grid2"));
 		
     gtk_builder_connect_signals(builder, NULL);
   
@@ -309,16 +317,47 @@ void print_table()
     printf("\n");
 }
 
+void insertar_tabla(char* sysname,int idx, int freq){
+	static GtkWidget* fila[2];
+	for( int j = 0; j <2; j++)
+		{
+			fila[j] = gtk_entry_new();
+			
+		}
+
+	if(freq!=1){
+		gtk_grid_remove_row(grid2,idx);
+	}
+	gtk_grid_insert_row(GTK_GRID(grid2), idx);
+	//insertar entry con nombre
+	gtk_entry_set_max_length(GTK_ENTRY(fila[0]),15);
+	gtk_widget_set_size_request(fila[0],1,1);
+	gtk_entry_set_text(GTK_ENTRY(fila[0]),sysname);
+	gtk_grid_attach(GTK_GRID(grid2),fila[0],1,idx,1,1);
+	//insertar entry con frec
+	gtk_entry_set_max_length(GTK_ENTRY(fila[1]),4);
+	gtk_widget_set_size_request(fila[1],1,1);
+	char frequ[4];
+	sprintf(frequ,"%d",freq);
+	gtk_entry_set_text(GTK_ENTRY(fila[1]),frequ);
+	gtk_grid_attach (GTK_GRID(grid2),fila[1],2,idx,1,1);
+
+	gtk_widget_show_all(window);
+	actualizar();
+	//sleep(0.75);
+}
+
 // Busca un lugar en mtx para alojar un nuevo syscall o incrementar sus usos
-int find_place(int pid)
+int find_place(int pid, char* sysname)
 {
 
 	int i = 0;
 
 	for (i; i < PIDS; i++){
 
-		if (mtx[0][i] == pid || mtx[0][i] == -1) {
+		if ((mtx[0][i] == pid)||(mtx[0][i] == -1)){
 			mtx[1][i]++;
+			insertar_tabla(sysname,i,mtx[1][i]);
 			break;
 		}
 	}
@@ -327,7 +366,34 @@ int find_place(int pid)
 
 	return i;
 }
+char * get_syscall_name(int syscall_id){
+	
+	// Variables para guardar el nombre.
+	char *name;
+    name = malloc(50 * sizeof(char*));
+    // Variables para castaer el syscall_id
+	char id_str[50];
+	sprintf(id_str, "%d", syscall_id);
+	// Variables y construccion del comando a ejecutar
+	char cmd[20];
+	strcpy(cmd, "ausyscall ");
+	strcat(cmd, id_str);
+	//Variables para almacenar el resultado del comando
+	FILE *fp;
+	char ruta[1035];
 
+	fp = popen(cmd, "r"); // Abre el archivo creado con el resultado del comando
+	
+	// Lee el archivo y guarda el nombre
+	while (fgets(ruta, sizeof(ruta), fp) != NULL) {
+		strcpy(name, ruta);
+    }
+    
+    pclose(fp);
+	
+        
+    return name;
+}
 int create_child(int argc, char **argv) {
 
     char *args [argc+1];
@@ -355,9 +421,51 @@ int wait_for_syscall(pid_t child) {
     }
 }
 
+void insertar_bitacora(int syscall, char* sysname) {
+	static GtkWidget* fila[4];
+	for( int j = 0; j <4; j++)
+		{
+			fila[j] = gtk_entry_new();
+			
+		}
+	gtk_grid_insert_row(GTK_GRID(grid1), row);
+
+	//insertar entry con secuencia
+	gtk_entry_set_max_length(GTK_ENTRY(fila[0]),4);
+	gtk_widget_set_size_request(fila[0],1,1);
+	char global_index[4];
+	sprintf(global_index,"%d",row);
+	gtk_entry_set_text(GTK_ENTRY(fila[0]),global_index);
+	gtk_grid_attach(GTK_GRID(grid1),fila[0],1,row,1,1);
+
+	//insertar entry con id
+	gtk_entry_set_max_length(GTK_ENTRY(fila[1]),4);
+	gtk_widget_set_size_request(fila[1],1,1);
+	char sysid[4];
+	sprintf(sysid,"%d", syscall);
+	gtk_entry_set_text(GTK_ENTRY(fila[1]),sysid);
+	gtk_grid_attach (GTK_GRID(grid1),fila[1],2,row,1,1);
+
+	//insertar entry con nombre
+	gtk_entry_set_max_length(GTK_ENTRY(fila[2]),10);
+	gtk_widget_set_size_request(fila[2],1,5);
+	gtk_entry_set_text(GTK_ENTRY(fila[2]),sysname);
+	gtk_grid_attach (GTK_GRID(grid1),fila[2],3,row,1,1);
+
+	//insertar entry con descripcion
+	gtk_entry_set_max_length(GTK_ENTRY(fila[3]),19);
+	gtk_widget_set_size_request(fila[3],1,5);
+	gtk_entry_set_text(GTK_ENTRY(fila[3]),"descripcion");
+	gtk_grid_attach (GTK_GRID(grid1),fila[3],4,row,1,1);
+
+	gtk_widget_show_all(window);
+	actualizar();
+	sleep(1);
+	row ++;
+}
+
 int trace(pid_t child) 
 {
-
     int status, syscall, retval;
     waitpid(child, &status, 0);
     ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD);
@@ -367,15 +475,17 @@ int trace(pid_t child)
     	if (wait_for_syscall(child) != 0) break;
 
         syscall = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX);
-
-        int place = find_place(syscall); //Busca un ligar en mtx[0] y lo ubica o suma
+		printf("SYS ID>%i",syscall);
+		char* sysname = get_syscall_name(syscall);
+		insertar_bitacora(syscall,sysname);
+        int place = find_place(syscall,sysname); //Busca un ligar en mtx[0] y lo ubica o suma
         mtx[0][place] = syscall;		 // la cantidad de PIDS del contador en mtx[1]
 
-        if (flag != -1) fprintf(stderr, "Syscall(%d) = ", syscall); // Si es -v imprima datos del syscall
+        if (flag != -1) fprintf(stderr, "Syscall(%d) = ", syscall); //  imprima datos del syscall
 
         if (wait_for_syscall(child) != 0) break;
 
-        retval = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*RAX); // Si es -v imprima valor de retorno del syscall
+        retval = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*RAX); // imprima valor de retorno del syscall
 
         if (flag != -1) fprintf(stderr, "%d\n", retval);
 
@@ -406,7 +516,6 @@ int otroMain(char **argv,int argc) {
 
     pid_t child = fork(); // Obtengo el PID del proceso hijo
     if (child == 0) {
-
     	 create_child(argc-1, argv+1); // Se ignora ./rastreador
 
     } else {
