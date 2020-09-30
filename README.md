@@ -13,11 +13,14 @@ mación C.
 Se despliega una interfaz mostrando los datos de distinta manera (bitácora, tabla acumulada, gráfico de pastel).
 
 ### Bibliotecas utilizadas
-Biblioteca ptrace: Se trata de un syscall que permite a un proceso padre rastrear o inspeccionar los syscalls
+###Biblioteca ptrace
+Se trata de un syscall que permite a un proceso padre rastrear o inspeccionar los syscalls
 de los procesos hijos.
-Biblioteca sys/reg: Nos permite utilizar Rax y ORGI RAX que nos ayudarán ubicar el id de un syscall
+###Biblioteca sys/reg
+ Nos permite utilizar Rax y ORGI RAX que nos ayudarán ubicar el id de un syscall
 y su valor de retorno respectivamente.
-Biblioteca unistd: Es realmente un header que proporciona acceso a la API del sistema operativo POSIX.
+###Biblioteca unistd
+Es realmente un header que proporciona acceso a la API del sistema operativo POSIX.
 Nos permite obtener el PID de un syscall y ejecutar fork() para crear procesos hijos.
 
 ### Estructuras de datos usadas y funciones:
