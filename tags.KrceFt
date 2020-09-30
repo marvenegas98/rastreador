@@ -1,0 +1,15 @@
+TARGET	makefile	/^TARGET=interfaz$/;"	m
+SRC	makefile	/^SRC=src$/;"	m
+OBJ	makefile	/^OBJ=obj$/;"	m
+SOURCES	makefile	/^SOURCES = $(wildcard $(SRC)\/*.c)$/;"	m
+OBJECTS	makefile	/^OBJECTS = $(patsubst $(SRC)\/%.c, $(OBJ)\/%.o, $(SOURCES))$/;"	m
+CC	makefile	/^CC=gcc$/;"	m
+DEBUG	makefile	/^DEBUG=-g$/;"	m
+OPT	makefile	/^OPT=-O0 -O2$/;"	m
+WARN	makefile	/^WARN=-Wall$/;"	m
+PTHREAD	makefile	/^PTHREAD=-pthread$/;"	m
+LIBS	makefile	/^LIBS=-L\/usr\/lib -lcgraph -lgvc -lgraph$/;"	m
+CCFLAGS	makefile	/^CCFLAGS=$(LIBS) $(DEBUG) $(OPT) $(WARN) $(PTHREAD) -pipe$/;"	m
+GTKLIB	makefile	/^GTKLIB=`pkg-config --cflags --libs gtk+-3.0`$/;"	m
+LD	makefile	/^LD=gcc$/;"	m
+LDFLAGS	makefile	/^LDFLAGS=$(PTHREAD) $(GTKLIB) -export-dynamic -rdynamic$/;"	m
