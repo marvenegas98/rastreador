@@ -48,8 +48,8 @@
                 <property name="can_focus">True</property>
                 <property name="margin_left">5</property>
                 <property name="margin_right">5</property>
-                <property name="margin_top">18</property>
-                <property name="margin_bottom">18</property>
+                <property name="margin_top">28</property>
+                <property name="margin_bottom">16</property>
                 <property name="placeholder_text" translatable="yes">PROG</property>
               </object>
               <packing>
@@ -68,6 +68,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <property name="margin_left">100</property>
                     <property name="margin_bottom">15</property>
                     <property name="xpad">52</property>
                     <property name="label" translatable="yes">
@@ -98,6 +99,7 @@
                 <property name="label" translatable="yes">Bitácora</property>
                 <attributes>
                   <attribute name="font-desc" value="Sans Bold 15"/>
+                  <attribute name="style" value="normal"/>
                 </attributes>
               </object>
               <packing>
@@ -109,11 +111,20 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_top">1</property>
                 <child>
                   <object class="GtkLabel">
+                    <property name="height_request">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin_left">335</property>
+                    <property name="margin_top">15</property>
+                    <property name="ypad">16</property>
                     <property name="label" translatable="yes">Escriba aquí el programa a ejecutar:</property>
+                    <property name="yalign">0.56000000238418579</property>
                     <attributes>
                       <attribute name="font-desc" value="Sans Bold 12"/>
                     </attributes>
@@ -122,9 +133,6 @@
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -149,6 +157,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes"># Secuencia</property>
+                    <property name="justify">center</property>
                     <attributes>
                       <attribute name="weight" value="semibold"/>
                     </attributes>
@@ -163,6 +172,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">ID</property>
+                    <property name="justify">center</property>
                     <property name="angle">0.01</property>
                     <property name="max_width_chars">4</property>
                     <attributes>
@@ -180,6 +190,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Nombre</property>
+                    <property name="justify">center</property>
                     <attributes>
                       <attribute name="weight" value="semibold"/>
                     </attributes>
@@ -194,6 +205,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">   Descripción</property>
+                    <property name="justify">center</property>
                     <property name="xalign">0.5</property>
                     <attributes>
                       <attribute name="weight" value="semibold"/>
@@ -219,25 +231,36 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrWin1">
-                    <property name="width_request">317</property>
+                    <property name="width_request">600</property>
                     <property name="height_request">160</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                     <property name="margin_left">10</property>
                     <property name="margin_right">10</property>
                     <property name="margin_top">10</property>
                     <property name="margin_bottom">10</property>
+                    <property name="vscrollbar_policy">always</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkViewport" id="view2">
-                        <property name="width_request">100</property>
+                        <property name="width_request">600</property>
                         <property name="height_request">80</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
                         <child>
                           <object class="GtkGrid" id="grid2">
+                            <property name="width_request">100</property>
+                            <property name="height_request">80</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="margin_left">8</property>
+                            <property name="margin_top">5</property>
                             <child>
                               <placeholder/>
                             </child>
@@ -264,11 +287,12 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">58</property>
+                    <property name="xpad">30</property>
                     <property name="ypad">0</property>
                     <property name="label" translatable="yes">Nombre</property>
+                    <property name="justify">center</property>
                     <property name="width_chars">1</property>
-                    <property name="xalign">0.52999997138977051</property>
+                    <property name="xalign">0.43999999761581421</property>
                     <property name="yalign">0.56000000238418579</property>
                     <attributes>
                       <attribute name="weight" value="semibold"/>
@@ -280,17 +304,78 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkButton" id="nomasc">
+                    <property name="label">gtk-sort-ascending</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <property name="always_show_image">True</property>
+                    <signal name="clicked" handler="nomasc_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="frecdesc">
+                    <property name="label">gtk-sort-descending</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <property name="always_show_image">True</property>
+                    <signal name="clicked" handler="frecdesc_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">5</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">21</property>
+                    <property name="xpad">10</property>
                     <property name="label" translatable="yes">Frecuencia</property>
+                    <property name="justify">center</property>
                     <attributes>
                       <attribute name="weight" value="semibold"/>
                     </attributes>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="frecasc">
+                    <property name="label">gtk-sort-ascending</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <property name="always_show_image">True</property>
+                    <signal name="clicked" handler="frecasc_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="nomdesc">
+                    <property name="label">gtk-sort-descending</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <property name="always_show_image">True</property>
+                    <signal name="clicked" handler="nomdesc_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -306,14 +391,14 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrWin2">
-                    <property name="width_request">600</property>
+                    <property name="width_request">700</property>
                     <property name="height_request">180</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkViewport" id="view1">
-                        <property name="width_request">600</property>
+                        <property name="width_request">700</property>
                         <property name="height_request">180</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -354,7 +439,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ejecutarPausado">
-                <property name="label" translatable="yes">Ejecutar Pausado</property>
+                <property name="label" translatable="yes">Ejecutar pausado</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -367,10 +452,12 @@
             </child>
             <child>
               <object class="GtkButton" id="siguiente">
-                <property name="label" translatable="yes">Siguiente</property>
+                <property name="label">gtk-media-next</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <property name="always_show_image">True</property>
                 <signal name="clicked" handler="ejecutar_siguiente" object="comando" swapped="no"/>
               </object>
               <packing>
@@ -415,24 +502,53 @@
             <child>
               <placeholder/>
             </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid3">
+            <property name="name">grid3</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <child>
-              <placeholder/>
+              <object class="GtkLabel" id="bitacora">
+                <property name="can_focus">False</property>
+                <property name="margin_left">542</property>
+                <property name="margin_top">3</property>
+                <property name="margin_bottom">3</property>
+                <attributes>
+                  <attribute name="font-desc" value="Sans Bold 15"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkLabel" id="acumulada">
+                <property name="can_focus">False</property>
+                <property name="margin_left">433</property>
+                <property name="margin_top">3</property>
+                <property name="margin_bottom">3</property>
+                <attributes>
+                  <attribute name="font-desc" value="Sans Bold 15"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="padding">6</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -446,8 +562,8 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="margin_top">5</property>
-                <property name="margin_bottom">5</property>
+                <property name="margin_top">1</property>
+                <property name="margin_bottom">1</property>
                 <property name="label" translatable="yes">Gráfico de Pastel</property>
                 <attributes>
                   <attribute name="font-desc" value="Sans Bold 20"/>
@@ -463,7 +579,6 @@
               <object class="GtkImage" id="imagen">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -477,6 +592,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="margin_left">518</property>
+                <property name="margin_right">500</property>
+                <property name="margin_top">10</property>
                 <signal name="clicked" handler="reiniciar_ejecucion" swapped="no"/>
               </object>
               <packing>
@@ -485,11 +603,29 @@
                 <property name="position">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkButton" id="terminar_ejecucion">
+                <property name="label" translatable="yes">Terminar Ejecución</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="margin_left">518</property>
+                <property name="margin_right">500</property>
+                <property name="margin_top">4</property>
+                <property name="margin_bottom">5</property>
+                <signal name="clicked" handler="on_destroy" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>

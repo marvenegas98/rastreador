@@ -1,0 +1,314 @@
+0,read from a file descriptor
+1,write to a file descriptor
+2,open and possibly create a file
+3,closes a file descriptor
+4,get file status
+5,get file status
+6,get file status
+7,wait for some event on a file descriptor
+8,reposition read/write file offset
+9,map or unmap files or devices into memory
+10,set protection on a region of memory
+11,map or unmap files or devices into memory
+12,change data segment size
+13,examine and change a signal action
+14,examine and change blocked signals
+15,return  from  signal handler and cleanup
+16,control device
+17,read from a file descriptor at a given offset
+18,write to a file descriptor at a given offset
+19,read data from multiple buffers
+20,write data into multiple buffers
+21,check user's permissions for a file
+22,create pipe
+23,synchronous I/O multiplexing
+24,yield the processor
+25,remap a virtual memory address
+26,synchronize a file with a memory map
+27,determine whether pages are resident in memory
+28,give advice about use of memory
+29,allocates a System V shared memory segment
+30,System V shared memory operations
+31,System V shared memory control
+32,duplicate a file descriptor
+33,duplicate a file descriptor
+34,wait for signal
+35,high-resolution sleep
+36,get or set value of an interval timer
+37,set an alarm clock for delivery of a signal
+38,get or set value of an interval timer
+39,get process identification
+40,transfer data between file descriptors
+41,create an endpoint for communication
+42,initiate a connection on a socket
+43,accept a connection on a socket
+44,send a message on a socket
+45,receive a message from a socket
+46,send a message on a socket
+47,receive a message from a socket
+48,shut down part of a full-duplex connection
+49,bind a name to a socket
+50,listen for connections on a socket
+51,get socket name
+52,get name of connected peer socket
+53,create a pair of connected sockets
+54,set options on sockets
+55,get options from sockets
+56,create a child process
+57,create a child process
+58,create a child process and block parent
+59,execute program
+60,terminate the calling process
+61,wait for process to change state
+62,send signal to a process
+63,get name and information about current kernel
+64,get a System V semaphore set identifier
+65,System V semaphore operations
+66,System V semaphore control operations
+67,System V shared memory operations
+68,get a System V message queue identifier
+69,System V message queue operations
+70,System V message queue operations
+71,System V message control operations
+72,manipulate file descriptor
+73,apply or remove an advisory lock on an open file
+74,synchronize a file's in-core state with storage device
+75,synchronize a file's in-core state with storage device
+76,truncate a file to a specified length
+77,truncate a file to a specified length
+78,get directory entries
+79,No description found
+80,change working directory
+81,change working directory
+82,change the name or location of a file
+83,create a directory
+84,delete a directory
+85,open and possibly create a file
+86,make a new name for a file
+87,delete a name and possibly the file it refers to
+88,make a new name for a file
+89,read value of a symbolic link
+90,change permissions of a file
+91,change permissions of a file
+92,change ownership of a file
+93,change ownership of a file
+94,change ownership of a file
+95,set file mode creation mask
+96,get set time
+97,get resource limits
+98,get resource usage
+99,return system information
+100,get process times
+101,process trace
+102,get user identity
+103,read and/or clear kernel message ring buffer
+104,get group identity
+105,set user identity
+106,set group identity
+107,get user identity
+108,get group identity
+109,set process group
+110,get process identification
+111,get process group
+112,creates a session and sets the process group ID
+113,set real and/or effective user or group ID
+114,set real and/or effective user or group ID
+115,get list from supplementary group IDs
+116,set list of supplementary group IDs
+117,set real, effective and saved user or group ID
+118,get real, effective and saved user/group IDs
+119,set real, effective and saved user or group ID
+120,get real, effective and saved user/group IDs
+121,get process group
+122,set user identity used for filesystem checks
+123,set group identity used for filesystem checks
+124,get session ID
+125,set/get capabilities of thread(s)
+126,set/get capabilities of thread(s)
+127,examine pending signals
+128,synchronously wait forqueued signals
+129,queue a signal and data
+130,wait for a signal
+131,set and/or get signal stack context
+132,change file last access and modification times
+133,create a special or ordinary file
+134,load shared library
+135,set the process execution domain
+136,get filesystem statistics
+137,get filesystem statistics
+138,get filesystem statistics
+139,get filesystem type information
+140,get/set program scheduling priority
+141,get/set program scheduling priority
+142,set and get scheduling parameters
+143,set and get scheduling parameters
+144,set and get scheduling policy/parameters
+145,set and get scheduling policy/parameters
+146,get static priority range
+147,get static priority range
+148,get  the  SCHED_RR  interval  for the named process
+149,lock and unlock memory
+150,lock and unlock memory
+151,lock and unlock memory
+152,lock and unlock memory
+153,virtually hangup the current terminal
+154,get or set a per-process LDT entry
+155,change the root mount
+156,read/write system parameters
+157,operations on a process or thread
+158,set architecture-specific thread state
+159,tune kernel clock
+160,get/set resource limits
+161,change root directory
+162,commit filesystem caches to disk
+163,switch process accounting on or off
+164,get / set time
+165,mount filesystem
+166,unmount filesystem
+167,start/stop swapping to file/device
+168,start/stop swapping to file/device
+169,reboot or enable/disable Ctrl-Alt-Del
+170,get/set hostname
+171,get/set NIS domain name
+172,change I/O privilege level
+173,set port input/output permissions
+174,create a loadable module entry
+175,load a kernel module
+176,unload a kernel module
+177,retrieve exported kernel and module symbols
+178,query the kernel for various bits pertaining to modules
+179,manipulate disk quotas
+180,syscall interface to kernel nfs daemon
+181,No description found
+182,No description found
+183,No description found
+184,No description found
+185,No description found
+186,get thread identification
+187,initiate file readahead into page cache
+188,set an extended attribute value
+189,set an extended attribute value
+190,set an extended attribute value
+191,retrieve an extended attribute value
+192,retrieve an extended attribute value
+193,retrieve an extended attribute value
+194,list extended attribute names
+195,list extended attribute names
+196,list extended attribute names
+197,remove  an  extended attribute
+198,remove  an  extended attribute
+199,remove  an  extended attribute
+200,send a signal to a thread
+201,get time in seconds
+202,fast user-space locking
+203,set and get a thread's CPU affinity mask
+204,set and get a thread's CPU affinity mask
+205,manipulate thread-local storage information
+206,create an asynchronous I/O context
+207,destroy an asynchronous I/O context
+208,read asynchronous I/O events from the completion queue
+209,submit asynchronous I/O blocks for processing
+210,cancel an outstanding asynchronous I/O operation
+211,manipulate thread-local storage information
+212,return a directory entry's path
+213,open an epoll file descriptor
+214,No description found
+215,No description found
+216,create a nonlinear file mapping
+217,get directory entries
+218,set pointer to thread ID
+219,restart a system call after interruption by a stop signal
+220,System V semaphore operations
+221,predeclare an access pattern for file data
+222,create a POSIX per-process timer
+223,arm/disarm and fetch state of POSIX per-process timer
+224,arm/disarm and fetch state of POSIX per-process timer
+225,get overrun count for a POSIX per-process timer
+226,delete a POSIX per-process timer
+227,clock and time functions
+228,clock and time functions
+229,clock and time functions
+230,high-resolution sleep with specifiable clock
+231,exit all threads in a process
+232,wait  for  an I/O event on an epoll file descriptor
+233,control interface for an epoll file descriptor
+234,send a signal to a thread
+235,change file last access and modification times
+236,No description found
+237,set memory policy for a memory range
+238,set default NUMA memory policy for a thread and its children
+239,retrieve NUMA memory policy for a thread
+240,No description found
+241,No description found
+242,No description found
+243,No description found
+244,No description found
+245,get/set message queue attributes
+246,load a new kernel for later execution
+247,wait for process to change state
+248,add a key to the kernel's key management facility
+249,request a key from the kernel's key management facility
+250,manipulate the kernel's key management facility
+251,get/set I/O scheduling class and priority
+252,get/set I/O scheduling class and priority
+253,initialize an inotify instance
+254,add a watch to an initialized inotify instance
+255,remove an existing watch from an inotify instance
+256,move all pages in a process to another set of nodes
+257,open and possibly create a file
+258,create a directory
+259,create a special or ordinary file
+560,change ownership of a file
+261,change timestamps of a file relative to a directory file descriptor
+262,get file status
+263,delete a name and possibly the file it refers to
+264,change the name or location of a file
+265,make a new name for a file
+266,make a new name for a file
+267,read value of a symbolic link
+268,change permissions of a file
+269,check user's permissions for a file
+270,synchronous I/O multiplexing
+271,wait for some event on a file descriptor
+272,disassociate parts of the process execution context
+273,get/set list of robust futexes
+274,get/set list of robust futexes
+275,splice data to/from a pipe
+276,duplicating pipe content
+277,sync a file segment with disk
+278,splice user pages to/from a pipe
+279,move individual pages of a process to another node
+280,change file timestamps with nanosecond precision
+281,wait  for  an I/O event on an epoll file descriptor
+282,create a file descriptor for accepting signals
+283,timers that notify via file descriptors
+284,create a file descriptor for event notification
+285,manipulate file space
+286,timers that notify via file descriptors
+287,timers that notify via file descriptors
+288,accept a connection on a socket
+289,create a file descriptor for accepting signals
+290,create a file descriptor for event notification
+291,open an epoll file descriptor
+292,duplicate a file descriptor
+293,create pipe
+294,initialize an inotify instance
+295,read or write data into multiple buffers
+296,read or write data into multiple buffers
+297,queue a signal and data
+298,set up performance monitoring
+299,receive multiple messages on a socket
+300,create and initialize fanotify group
+301,add/remove/modify an fanotify mark on a filesystem object
+302,get/set resource limits
+303,obtain handle for a pathname and open file via a handle
+304,obtain handle for a pathname and open file via a handle
+305,tune kernel clock
+306,commit filesystem caches to disk
+307,send multiple messages on a socket
+308,reassociate thread with a namespace
+309,determine CPU and NUMA node on which the calling thread is running
+310,transfer data between process address spaces
+311,transfer data between process address spaces
+312,compare  two  processes  to determine if they share a kernel resource
+313,load a kernel module
