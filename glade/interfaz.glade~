@@ -562,8 +562,8 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="margin_top">5</property>
-                <property name="margin_bottom">3</property>
+                <property name="margin_top">1</property>
+                <property name="margin_bottom">1</property>
                 <property name="label" translatable="yes">Gráfico de Pastel</property>
                 <attributes>
                   <attribute name="font-desc" value="Sans Bold 20"/>

@@ -315,10 +315,14 @@ void reiniciar_ejecucion(GtkButton *reiniciar){
 	elementos=0;
 	row=0;	
 	lst_idx = 0;
+	table_lenght=0;
 	gtk_widget_hide(imagen);
 	gtk_image_clear(imagen);
 	gtk_entry_set_text(comando, "");
-
+	gtk_widget_set_sensitive (siguiente, FALSE);
+	gtk_widget_set_sensitive (pausado, TRUE);
+	gtk_widget_set_sensitive (ejecutar, TRUE);
+	gtk_widget_set_sensitive (reiniciar, FALSE);
 	actualizar();
 }
 
@@ -514,6 +518,10 @@ void ktrace(pid_t hijo, int syscall, int retval){
 		actualizar();
 		crear_csv();
 		mostrar_imagen();
+		gtk_widget_set_sensitive (siguiente, FALSE);
+		gtk_widget_set_sensitive (pausado, FALSE);
+		gtk_widget_set_sensitive (ejecutar, FALSE);
+		gtk_widget_set_sensitive (reiniciar, TRUE);
 	}
 
 	syscall = ptrace(PTRACE_PEEKUSER, hijo, sizeof(long)*ORIG_RAX);
@@ -537,6 +545,10 @@ void ktrace(pid_t hijo, int syscall, int retval){
 		actualizar();
 		crear_csv();
 		mostrar_imagen();
+		gtk_widget_set_sensitive (siguiente, FALSE);
+		gtk_widget_set_sensitive (pausado, FALSE);
+		gtk_widget_set_sensitive (ejecutar, FALSE);
+		gtk_widget_set_sensitive (reiniciar, TRUE);
 	}
 
 	retval = ptrace(PTRACE_PEEKUSER, hijo, sizeof(long)*RAX); // imprima valor de retorno del syscall
@@ -599,6 +611,9 @@ int otroMain(char **argv,int argc) {
 }
 void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 	flag=0;
+	gtk_widget_set_sensitive (siguiente, FALSE);
+	gtk_widget_set_sensitive (pausado, FALSE);
+	gtk_widget_set_sensitive (ejecutar, FALSE);
 	const char *text;
     text = gtk_entry_get_text(data);
 	char** args = split_command(text);
@@ -622,10 +637,15 @@ void ejecutar_comando(GtkButton *ejecutar, gpointer data){
 	actualizar();
 	crear_csv();
 	mostrar_imagen();
+	gtk_widget_set_sensitive (reiniciar, TRUE);
+	
 }	
 
-void ejecutar_pausado(GtkButton *ejecutarPausado, gpointer data){
+void ejecutar_pausado(GtkButton *pausado, gpointer data){
 	flag=1;
+	gtk_widget_set_sensitive (ejecutar, FALSE);
+	gtk_widget_set_sensitive (pausado, FALSE);
+	gtk_widget_set_sensitive (siguiente, TRUE);
 	const char *text;
     text = gtk_entry_get_text(data);
 	char** args = split_command(text);
@@ -694,6 +714,9 @@ int interfaz()
 	frecdesc = GTK_BUTTON(gtk_builder_get_object(builder, "frecdesc"));
 
 	destroy = GTK_BUTTON(gtk_builder_get_object(builder, "terminar_ejecucion"));
+
+	gtk_widget_set_sensitive (reiniciar, FALSE);
+	gtk_widget_set_sensitive (siguiente, FALSE);
     gtk_builder_connect_signals(builder, NULL);
   
 	g_object_unref(builder);

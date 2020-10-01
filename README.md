@@ -12,28 +12,27 @@ mación C.
 
 Se despliega una interfaz mostrando los datos de distinta manera (bitácora, tabla acumulada, gráfico de pastel).
 
-### Bibliotecas utilizadas
-###Biblioteca ptrace
+## Bibliotecas utilizadas
+### Biblioteca ptrace
 Se trata de un syscall que permite a un proceso padre rastrear o inspeccionar los syscalls
 de los procesos hijos.
-###Biblioteca sys/reg
+### Biblioteca sys/reg
  Nos permite utilizar Rax y ORGI RAX que nos ayudarán ubicar el id de un syscall
 y su valor de retorno respectivamente.
-###Biblioteca unistd
+### Biblioteca unistd
 Es realmente un header que proporciona acceso a la API del sistema operativo POSIX.
 Nos permite obtener el PID de un syscall y ejecutar fork() para crear procesos hijos.
 
-### Estructuras de datos usadas y funciones:
-**ARGV: Puntero al espacio en memoria que C utiliza por defecto para almacenar los parámetros que el
-usuario asigne al programa en cuestión.
-ptrace: Función que permite que nuestro programa (proceso padre) rastree los syscalls de los procesos hijos.
-wait for syscall: Esta función simplemente nos ayudará a saber cuando se terminó de ejecutar un syscall
+## Estructuras de datos usadas y funciones:
+
+### ptrace: Función que permite que nuestro programa (proceso padre) rastree los syscalls de los procesos hijos.
+### wait for syscall: Esta función simplemente nos ayudará a saber cuando se terminó de ejecutar un syscall
 (recibiendo como parámentro un proceso hijo), en dicho caso retorna 1. Si no se ha terminado de ejecutar el
 syscall, retorna 0.
-trace: Se trata de la función que rastrea los syscalls, toma su PID y su valor de retorno. Esta función hace
+### trace: Se trata de la función que rastrea los syscalls, toma su PID y su valor de retorno. Esta función hace
 uso de wait for syscall para saber cuando es prudente tomar valores sin crear errores, en caso contrario, corta
 la ejecución.
-create child: Eejecuta ptrace para dar los permisos necesario al pro
+### create child: Eejecuta ptrace para dar los permisos necesario al pro
 
 
 
@@ -56,9 +55,10 @@ Para correr el proyecto:
 Realizado esto, se despliega la interfaz del proyecto. 
 Aquí, en el campo de "PROG" se debe escribir el programa a ejecutar, por ejemplo:
 
-        ls
+        ls -al
     
 ## Qué no funciona
+
 Lo único que se ha encontrado que no funciona es el trabajo extra opcional del proyecto (Mostrar de manera formateada los argumentos de por lo menos 5 tipos diferentes de
 system call.), ya que no se implementó esta característica.
     

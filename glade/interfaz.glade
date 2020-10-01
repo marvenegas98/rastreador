@@ -267,6 +267,27 @@
                             <child>
                               <placeholder/>
                             </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -425,6 +446,21 @@
                             <child>
                               <placeholder/>
                             </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -438,7 +474,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="ejecutarPausado">
+              <object class="GtkButton" id="pausado">
                 <property name="label" translatable="yes">Ejecutar pausado</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
