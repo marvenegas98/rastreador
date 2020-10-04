@@ -49,8 +49,8 @@ Al intentar correr el comando "cd", sin importar los parámetros utilizados en e
       
 Indagando acerca del error, no dimos cuenta que el error parece venir de la librería "libx11" apartir de una actualización realizada a la misma. Esto es discutido en el siguiente foro: https://bugs.launchpad.net/ubuntu/+source/gtk+2.0/+bug/1808710 
 
-Lo único que se ha encontrado que no funciona es el trabajo extra opcional del proyecto (Mostrar de manera formateada los argumentos de por lo menos 5 tipos diferentes de
-system call.), ya que no se implementó esta característica.
+El trabajo extra opcional del proyecto (Mostrar de manera formateada los argumentos de por lo menos 5 tipos diferentes de
+system call.), no fue implementado.
 
 ## Bibliotecas utilizadas
 ### Biblioteca ptrace
